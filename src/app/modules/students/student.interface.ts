@@ -2,11 +2,7 @@ import { Schema, model, connect } from "mongoose";
 
 export type Student = {
   id: string;
-  name: {
-    firstName: string;
-    middleName: string;
-    lastName: string;
-  };
+  name: UserName;
   gender: "male" | "female";
   email: string;
   avatar?: string;
@@ -17,8 +13,12 @@ export type Student = {
   presentAddress: string;
   permanentAddress: string;
   guardian: Guardian;
+  localGuardian: LocalGuardian;
+  profileImage?: string;
+  isActive: "active" | "inactive";
 };
 
+//Guardian information type
 export type Guardian = {
   fatherName: string;
   fatherOccupation: string;
@@ -26,4 +26,19 @@ export type Guardian = {
   motherName: string;
   motherOccupation: string;
   motherContactNo: string;
+};
+
+// Username type
+export type UserName = {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+};
+
+//Local guardian
+export type LocalGuardian = {
+  name: string;
+  occupation: string;
+  contactNo: string;
+  address: string;
 };
