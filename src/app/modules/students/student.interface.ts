@@ -1,8 +1,9 @@
-import { Schema, model, connect } from "mongoose";
+import { Model } from "mongoose";
 
-export type Student = {
+// Student Interface
+export type TStudent = {
   id: string;
-  name: UserName;
+  name: TUserName;
   gender: "male" | "female";
   email: string;
   avatar?: string;
@@ -12,14 +13,21 @@ export type Student = {
   bloodGroup: "A+" | "A" | "B+" | "B" | "O+" | "O" | "AB+" | "AB";
   presentAddress: string;
   permanentAddress: string;
-  guardian: Guardian;
-  localGuardian: LocalGuardian;
+  guardian: TGuardian;
+  localGuardian: TLocalGuardian;
   profileImage?: string;
   isActive: "active" | "inactive";
 };
 
+// Username type
+export type TUserName = {
+  firstName: string;
+  middleName?: string;
+  lastName?: string;
+};
+
 //Guardian information type
-export type Guardian = {
+export type TGuardian = {
   fatherName: string;
   fatherOccupation: string;
   fatherContactNo: string;
@@ -28,17 +36,21 @@ export type Guardian = {
   motherContactNo: string;
 };
 
-// Username type
-export type UserName = {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-};
-
 //Local guardian
-export type LocalGuardian = {
+export type TLocalGuardian = {
   name: string;
   occupation: string;
   contactNo: string;
   address: string;
 };
+
+//Check by the ID is the user already exist or not
+export type StudentMethods = {
+  isUserExists: (id: string) => Promise<TStudent | null>;
+};
+
+export type StudentModel = Model<
+  TStudent,
+  Record<string, never>,
+  StudentMethods
+>;
