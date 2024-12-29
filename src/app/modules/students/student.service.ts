@@ -4,12 +4,17 @@ import { Student } from "./student.model";
 //#=>Create a student
 const createStudentIntoDB = async (studentData: TStudent) => {
   //Builtin static method
-  // const result = await StudentModel.create(student);
-  const student = await new Student(studentData);
-  if (await student.isUserExists(student.id)) {
+
+  if (await Student.isUserExists(studentData.id)) {
     throw new Error("User already exists");
   }
-  const result = await student.save();
+  const result = await Student.create(studentData);
+
+  // const student = await new Student(studentData);
+  // if (await student.isUserExists(student.id)) {
+  //   throw new Error("User already exists");
+  // }
+  // const result = await student.save();
   return result;
 };
 
@@ -25,9 +30,16 @@ const getStudentByIdFromDB = async (id: string) => {
   return result;
 };
 
+//#=>delete single student by id
+const deleteStudentByIdFromDB = async (id: string) => {
+  const result = await Student.updateOne({ id }, { isDeleted: true });
+  return result;
+};
+
 //#=> Export
 export const StudentServices = {
   createStudentIntoDB,
   getAllStudentsFromDB,
   getStudentByIdFromDB,
+  deleteStudentByIdFromDB,
 };

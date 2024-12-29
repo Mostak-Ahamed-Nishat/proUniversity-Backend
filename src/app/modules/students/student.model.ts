@@ -1,12 +1,16 @@
 import mongoose, { Schema, model } from "mongoose";
+import bcrypt from "bcrypt";
+
 import {
   TGuardian,
   TLocalGuardian,
   TStudent,
-  StudentMethods,
-  TUserName,
   StudentModel,
+  // StudentMethods,
+  TUserName,
 } from "./student.interface";
+import config from "../../config";
+import { boolean } from "zod";
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -83,11 +87,16 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 });
 
 // Create Student Schema
-const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
+const studentSchema = new Schema<TStudent, StudentModel>({
   id: {
     type: String,
     required: [true, "Student ID is required."],
     unique: true,
+  },
+  password: {
+    type: String,
+    required: [true, "Password is required."],
+    min: 6,
   },
   name: {
     type: userNameSchema,
@@ -151,12 +160,54 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
   profileImage: {
     type: String,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false, // Default value is false if not set
+  },
 });
 
-studentSchema.methods.isUserExists = async (id: string) => {
+//-----Custom Static method for check exist user in mongoose---
+studentSchema.statics.isUserExists = async function (id: string) {
   const isUserExist = await Student.findOne({ id });
   return isUserExist;
 };
+
+// Middleware(pre) just before save the data make the password hash
+studentSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password, Number(config.saltRound));
+  next();
+});
+
+// Middleware(post) just after save the data when returning successfully created data return return without hash password
+studentSchema.post("save", async function (doc, next) {
+  doc.password = "";
+  next();
+});
+
+//Middleware aggregation Query Middleware
+// -> prevent returning isDelete data for find query
+studentSchema.pre("find", async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+// -> prevent returning isDelete data for findOne query
+studentSchema.pre("findOne", async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+// -> prevent returning isDelete data for aggregations query
+studentSchema.pre("aggregate", async function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
+
+// ------Custom Instance Method for check exist user in mongoose----
+// studentSchema.methods.isUserExists = async (id: string) => {
+//   const isUserExist = await Student.findOne({ id });
+//   return isUserExist;
+// };
 
 // Create Student Model
 export const Student = model<TStudent, StudentModel>("Student", studentSchema);

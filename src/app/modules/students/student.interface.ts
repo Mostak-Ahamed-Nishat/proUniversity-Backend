@@ -3,6 +3,7 @@ import { Model } from "mongoose";
 // Student Interface
 export type TStudent = {
   id: string;
+  password: string;
   name: TUserName;
   gender: "male" | "female";
   email: string;
@@ -16,6 +17,7 @@ export type TStudent = {
   guardian: TGuardian;
   localGuardian: TLocalGuardian;
   profileImage?: string;
+  isDeleted: true | false;
   isActive: "active" | "inactive";
 };
 
@@ -44,13 +46,19 @@ export type TLocalGuardian = {
   address: string;
 };
 
-//Check by the ID is the user already exist or not
-export type StudentMethods = {
-  isUserExists: (id: string) => Promise<TStudent | null>;
-};
+// --------------Create Static Method for mongoose----------
 
-export type StudentModel = Model<
-  TStudent,
-  Record<string, never>,
-  StudentMethods
->;
+export interface StudentModel extends Model<TStudent> {
+  isUserExists: (id: string) => Promise<TStudent | null>;
+}
+
+//-------- Create Instance Method for Mongoose-------
+// export type StudentMethods = {
+//   isUserExists: (id: string) => Promise<TStudent | null>;
+// };
+
+// export type StudentModel = Model<
+//   TStudent,
+//   Record<string, never>,
+//   StudentMethods
+// >;

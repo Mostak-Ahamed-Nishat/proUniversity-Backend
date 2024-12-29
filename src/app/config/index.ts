@@ -7,4 +7,5 @@ dotenv.config({ path: path.join((process.cwd(), ".env")) });
 export default {
   port: process.env.port,
   database_url: process.env.MONGODB_URL,
+  saltRound:process.env.SALTROUND
 };

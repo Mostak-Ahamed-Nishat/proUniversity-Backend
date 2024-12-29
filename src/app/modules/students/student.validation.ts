@@ -69,10 +69,14 @@ const localGuardianSchema = z.object({
 // Student Schema
 const studentValidationSchema = z.object({
   id: z.string().trim().min(1, { message: "Student ID is required." }),
+  password: z
+    .string()
+    .min(6, { message: "Password should be at least 6 character" }),
   name: userNameSchema,
   gender: z.enum(["female", "male"], {
     errorMap: () => ({ message: "Gender must be 'male' or 'female'." }),
   }),
+  isDeleted: z.boolean(),
   email: z.string().trim().email({ message: "Invalid email address." }),
   dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
     message: "Date of birth must be in the format YYYY-MM-DD.",
