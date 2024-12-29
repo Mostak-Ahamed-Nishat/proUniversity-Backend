@@ -60,10 +60,10 @@ const getAllStudents = async (req: Request, res: Response) => {
   }
 };
 
-const getStudentById = async (req: Request, res: Response) => {
+const getSingleStudentById = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params;
-    const response = await StudentServices.getStudentByIdFromDB(studentId);
+    const response = await StudentServices.getSingleStudentByIdFromDB(studentId);
     return res.status(200).json({
       success: true,
       message: "Student found successfully",
@@ -99,6 +99,6 @@ const deleteStudentId = async (req: Request, res: Response) => {
 export const StudentController = {
   createStudent,
   getAllStudents,
-  getStudentById,
-  deleteStudentId
+  getSingleStudentById,
+  deleteStudentId,
 };
