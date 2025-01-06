@@ -87,83 +87,96 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 });
 
 // Create Student Schema
-const studentSchema = new Schema<TStudent, StudentModel>({
-  id: {
-    type: String,
-    required: [true, "Student ID is required."],
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: [true, "Password is required."],
-    min: 6,
-  },
-  name: {
-    type: userNameSchema,
-    required: [true, "Student information can't be empty."],
-  },
-  gender: {
-    type: String,
-    enum: {
-      values: ["female", "male"],
-      message: "Gender must be 'male' or 'female'.",
+const studentSchema = new Schema<TStudent, StudentModel>(
+  {
+    id: {
+      type: String,
+      required: [true, "Student ID is required."],
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required."],
+      min: 6,
+    },
+    name: {
+      type: userNameSchema,
+      required: [true, "Student information can't be empty."],
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ["female", "male"],
+        message: "Gender must be 'male' or 'female'.",
+      },
+    },
+    email: {
+      type: String,
+      trim: true,
+      required: [true, "Email is required."],
+    },
+    dateOfBirth: {
+      type: String,
+      required: [true, "Date of birth is required."],
+    },
+    contactNumber: {
+      type: String,
+      required: [true, "Contact number is required."],
+    },
+    emergencyContactNo: {
+      type: String,
+      required: [true, "Emergency contact number is required."],
+    },
+    bloodGroup: {
+      type: String,
+      enum: {
+        values: ["A+", "A", "B+", "B", "O+", "O", "AB+", "AB"],
+        message: "{VALUE} is not a valid blood group.",
+      },
+    },
+    avatar: {
+      type: String,
+    },
+    guardian: {
+      type: guardianSchema,
+      required: [true, "Guardian information is required."],
+    },
+    localGuardian: {
+      type: localGuardianSchema,
+      required: [true, "Local guardian information is required."],
+    },
+    isActive: {
+      type: String,
+      enum: ["active", "inactive"],
+      message: "Status must be 'active' or 'inactive'.",
+    },
+    permanentAddress: {
+      type: String,
+      required: [true, "Permanent address is required."],
+    },
+    presentAddress: {
+      type: String,
+      required: [true, "Present address is required."],
+    },
+    profileImage: {
+      type: String,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false, // Default value is false if not set
     },
   },
-  email: {
-    type: String,
-    trim: true,
-    required: [true, "Email is required."],
-  },
-  dateOfBirth: {
-    type: String,
-    required: [true, "Date of birth is required."],
-  },
-  contactNumber: {
-    type: String,
-    required: [true, "Contact number is required."],
-  },
-  emergencyContactNo: {
-    type: String,
-    required: [true, "Emergency contact number is required."],
-  },
-  bloodGroup: {
-    type: String,
-    enum: {
-      values: ["A+", "A", "B+", "B", "O+", "O", "AB+", "AB"],
-      message: "{VALUE} is not a valid blood group.",
+  {
+    toJSON: {
+      virtuals: true,
     },
-  },
-  avatar: {
-    type: String,
-  },
-  guardian: {
-    type: guardianSchema,
-    required: [true, "Guardian information is required."],
-  },
-  localGuardian: {
-    type: localGuardianSchema,
-    required: [true, "Local guardian information is required."],
-  },
-  isActive: {
-    type: String,
-    enum: ["active", "inactive"],
-    message: "Status must be 'active' or 'inactive'.",
-  },
-  permanentAddress: {
-    type: String,
-    required: [true, "Permanent address is required."],
-  },
-  presentAddress: {
-    type: String,
-    required: [true, "Present address is required."],
-  },
-  profileImage: {
-    type: String,
-  },
-  isDeleted: {
-    type: Boolean,
-    default: false, // Default value is false if not set
-  },
+  }
+);
+
+//Virtual like i store name= first name, mid name,last name but want to return full name so can do it virtually form the existing db
+
+studentSchema.virtual("fullName").get(function () {
+  return `${this.name.firstName} ${this.name?.middleName} ${this.name.lastName}`;
 });
 
 //-----Custom Static method for check exist user in mongoose---
