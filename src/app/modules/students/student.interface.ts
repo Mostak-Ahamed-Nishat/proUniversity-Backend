@@ -2,6 +2,7 @@ import { Model } from "mongoose";
 
 // Student Interface
 export type TStudent = {
+  user: import("mongoose").Types.ObjectId;
   id: string;
   password: string;
   name: TUserName;

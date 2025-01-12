@@ -3,45 +3,6 @@ import { StudentServices } from "./student.service";
 import { studentValidationSchema } from "./student.validation";
 import { z } from "zod";
 // Create Student Controller
-const createStudent = async (req: Request, res: Response) => {
-  try {
-    const { student: studentData } = req.body;
-
-    const parsedStudentData = studentValidationSchema.parse(studentData);
-
-    //Will call service function to send this data
-    const response = await StudentServices.createStudentIntoDB(
-      parsedStudentData
-    );
-
-    response &&
-      res.status(200).json({
-        success: true,
-        message: "Student is created successfully",
-        data: response,
-      });
-  } catch (error: any) {
-    //If any validation error occurs
-
-    if (error instanceof z.ZodError) {
-      // Send structured validation error to the frontend
-      return res.status(400).json({
-        success: false,
-        message: "Validation failed",
-        errors: error.errors.map((issue) => ({
-          path: issue.path, // Field that caused the error
-          message: issue.message, // Human-readable error message
-        })),
-      });
-    }
-    //Server error
-    res.status(400).json({
-      success: false,
-      message: error.message || "Student created failed",
-      error: error,
-    });
-  }
-};
 
 const getAllStudents = async (req: Request, res: Response) => {
   try {
@@ -63,7 +24,9 @@ const getAllStudents = async (req: Request, res: Response) => {
 const getSingleStudentById = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params;
-    const response = await StudentServices.getSingleStudentByIdFromDB(studentId);
+    const response = await StudentServices.getSingleStudentByIdFromDB(
+      studentId
+    );
     return res.status(200).json({
       success: true,
       message: "Student found successfully",
@@ -97,7 +60,6 @@ const deleteStudentId = async (req: Request, res: Response) => {
 };
 
 export const StudentController = {
-  createStudent,
   getAllStudents,
   getSingleStudentById,
   deleteStudentId,
