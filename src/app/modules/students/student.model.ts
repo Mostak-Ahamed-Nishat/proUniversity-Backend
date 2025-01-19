@@ -151,11 +151,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: localGuardianSchema,
       required: [true, "Local guardian information is required."],
     },
-    isActive: {
-      type: String,
-      enum: ["active", "inactive"],
-      message: "Status must be 'active' or 'inactive'.",
-    },
     permanentAddress: {
       type: String,
       required: [true, "Permanent address is required."],

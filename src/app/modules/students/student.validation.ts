@@ -99,9 +99,9 @@ const studentValidationSchema = z.object({
   avatar: z.string().url().optional(),
   guardian: guardianSchema,
   localGuardian: localGuardianSchema,
-  isActive: z.enum(["active", "inactive"], {
-    errorMap: () => ({ message: "Status must be 'active' or 'inactive'." }),
-  }),
+  // isActive: z.enum(["active", "inactive"], {
+  //   errorMap: () => ({ message: "Status must be 'active' or 'inactive'." }),
+  // }),
   permanentAddress: z
     .string()
     .trim()

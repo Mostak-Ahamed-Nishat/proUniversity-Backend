@@ -1,5 +1,7 @@
+import bcrypt from "bcrypt";
 import { TUser } from "./user.interface";
 import { model, Model, Schema, SchemaType } from "mongoose";
+import config from "../../config";
 
 const userSchema = new Schema<TUser>(
   {
@@ -35,6 +37,15 @@ const userSchema = new Schema<TUser>(
 const User = model<TUser>("User", userSchema);
 export default User;
 
-userSchema.pre("save", function () {
-  this.password;
+//Hash password
+userSchema.pre("save", async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(user.password, Number(config.saltRound));
+  next();
+});
+
+// Return password as empty
+userSchema.post("save", function (doc, next) {
+  doc.password = "";
+  next();
 });

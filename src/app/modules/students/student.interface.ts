@@ -2,8 +2,8 @@ import { Model } from "mongoose";
 
 // Student Interface
 export type TStudent = {
-  user: import("mongoose").Types.ObjectId;
   id: string;
+  user: import("mongoose").Types.ObjectId;
   password: string;
   name: TUserName;
   gender: "male" | "female";
@@ -19,7 +19,6 @@ export type TStudent = {
   localGuardian: TLocalGuardian;
   profileImage?: string;
   isDeleted: true | false;
-  isActive: "active" | "inactive";
 };
 
 // Username type
