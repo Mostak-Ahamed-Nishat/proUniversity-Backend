@@ -111,6 +111,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     },
     gender: {
       type: String,
+      required: true,
       enum: {
         values: ["female", "male"],
         message: "Gender must be 'male' or 'female'.",
