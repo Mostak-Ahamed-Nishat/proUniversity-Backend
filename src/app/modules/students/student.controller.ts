@@ -1,14 +1,10 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { StudentServices } from "./student.service";
 import { studentValidationSchema } from "./student.validation";
 import { z } from "zod";
 // Create Student Controller
 
-const getAllStudents = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getAllStudents: RequestHandler = async (req, res, next) => {
   try {
     const response = await StudentServices.getAllStudentsFromDB();
     return res.status(200).json({
@@ -21,11 +17,7 @@ const getAllStudents = async (
   }
 };
 
-const getSingleStudentById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getSingleStudentById: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
     const response = await StudentServices.getSingleStudentByIdFromDB(
@@ -41,11 +33,7 @@ const getSingleStudentById = async (
   }
 };
 
-const deleteStudentId = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteStudentId: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
     const response = await StudentServices.deleteStudentByIdFromDB(studentId);
