@@ -68,50 +68,57 @@ const localGuardianSchema = z.object({
 
 // Student Schema
 const studentValidationSchema = z.object({
-  id: z.string().trim().min(1, { message: "Student ID is required." }),
-  password: z
-    .string()
-    .min(6, { message: "Password should be at least 6 character" }),
-  name: userNameSchema,
-  gender: z.enum(["female", "male"], {
-    errorMap: () => ({ message: "Gender must be 'male' or 'female'." }),
-  }),
-  isDeleted: z.boolean(),
-  email: z.string().trim().email({ message: "Invalid email address." }),
-  dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
-    message: "Date of birth must be in the format YYYY-MM-DD.",
-  }),
-  contactNumber: z
-    .string()
-    .trim()
-    .regex(/^\d{10}$/, {
-      message: "Contact number must be a valid 10-digit number.",
+  body: z.object({
+    password: z
+      .string()
+      .min(6, { message: "Password should be at least 6 character" }),
+    student: z.object({
+      name: userNameSchema,
+      gender: z.enum(["female", "male"], {
+        errorMap: () => ({ message: "Gender must be 'male' or 'female'." }),
+      }),
+      isDeleted: z.boolean(),
+      email: z.string().trim().email({ message: "Invalid email address." }),
+      dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+        message: "Date of birth must be in the format YYYY-MM-DD.",
+      }),
+      contactNumber: z
+        .string()
+        .trim()
+        .regex(/^\d{10}$/, {
+          message: "Contact number must be a valid 10-digit number.",
+        }),
+      emergencyContactNo: z
+        .string()
+        .trim()
+        .regex(/^\d{10}$/, {
+          message: "Emergency contact number must be a valid 10-digit number.",
+        }),
+      bloodGroup: z.enum(["A+", "A", "B+", "B", "O+", "O", "AB+", "AB"], {
+        errorMap: (value) => ({
+          message: `${value} is not a valid blood group.`,
+        }),
+      }),
+      avatar: z.string().url().optional(),
+      guardian: guardianSchema,
+      localGuardian: localGuardianSchema,
+      // isActive: z.enum(["active", "inactive"], {
+      //   errorMap: () => ({ message: "Status must be 'active' or 'inactive'." }),
+      // }),
+      permanentAddress: z
+        .string()
+        .trim()
+        .min(1, { message: "Permanent address is required." }),
+      presentAddress: z
+        .string()
+        .trim()
+        .min(1, { message: "Present address is required." }),
+      profileImage: z.string().url().optional(),
     }),
-  emergencyContactNo: z
-    .string()
-    .trim()
-    .regex(/^\d{10}$/, {
-      message: "Emergency contact number must be a valid 10-digit number.",
-    }),
-  bloodGroup: z.enum(["A+", "A", "B+", "B", "O+", "O", "AB+", "AB"], {
-    errorMap: (value) => ({ message: `${value} is not a valid blood group.` }),
   }),
-  avatar: z.string().url().optional(),
-  guardian: guardianSchema,
-  localGuardian: localGuardianSchema,
-  // isActive: z.enum(["active", "inactive"], {
-  //   errorMap: () => ({ message: "Status must be 'active' or 'inactive'." }),
-  // }),
-  permanentAddress: z
-    .string()
-    .trim()
-    .min(1, { message: "Permanent address is required." }),
-  presentAddress: z
-    .string()
-    .trim()
-    .min(1, { message: "Present address is required." }),
-  profileImage: z.string().url().optional(),
 });
 
 // Export the schema for validation
-export { studentValidationSchema };
+export const studentValidations = {
+  studentValidationSchema,
+};

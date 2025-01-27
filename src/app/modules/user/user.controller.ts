@@ -6,7 +6,7 @@ import {
   Response,
 } from "express";
 import { UserServices } from "./user.service";
-import { studentValidationSchema } from "../students/student.validation";
+import { studentValidations } from "../students/student.validation";
 import config from "../../config";
 import sendResponse from "../../utils/sendResponse";
 import status from "http-status";

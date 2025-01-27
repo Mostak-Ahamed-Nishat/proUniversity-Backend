@@ -6,14 +6,16 @@ import catchAsyncHandler from "../../utils/asyncHandler";
 
 // Create Student Controller
 
-const getAllStudents = catchAsyncHandler(async (req, res) => {
-  const response = await StudentServices.getAllStudentsFromDB();
-  return res.status(200).json({
-    success: true,
-    message: "Successfully get all the students",
-    data: response,
-  });
-});
+const getAllStudents: RequestHandler = catchAsyncHandler(
+  async (req, res, next) => {
+    const response = await StudentServices.getAllStudentsFromDB();
+    return res.status(200).json({
+      success: true,
+      message: "Successfully get all the students",
+      data: response,
+    });
+  }
+);
 
 const getSingleStudentById: RequestHandler = catchAsyncHandler(
   async (req, res) => {
