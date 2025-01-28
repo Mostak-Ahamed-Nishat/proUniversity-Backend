@@ -31,10 +31,10 @@ export const createAcademicSemesterValidation = z.object({
 // Zod schema for updating academic semester
 export const updateAcademicSemesterValidation = z.object({
   body: z.object({
-    title: z.enum(academicSemesterTitles).optional(),
-    year: z.string().optional(),
-    code: z.enum(TAcademicSemesterCodes).optional(),
-    startMonth: z.enum(TAcademicSemesterMonths).optional(),
-    endMonth: z.enum(TAcademicSemesterMonths).optional(),
+    title: z.enum([...AcademicSemesterName] as [string]).optional(),
+    year: z.date().optional(),
+    code: z.enum([...AcademicSemesterCode] as [string]).optional(),
+    startMonth: z.enum([...AcademicSemesterMonth] as [string]).optional(),
+    endMonth: z.enum([...AcademicSemesterMonth] as [string]).optional(),
   }),
 });
