@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // UserName Schema
-const userNameSchema = z.object({
+const userNameValidationSchema = z.object({
   firstName: z
     .string()
     .trim()
@@ -12,7 +12,7 @@ const userNameSchema = z.object({
 });
 
 // Guardian Schema
-const guardianSchema = z.object({
+const guardianValidationSchema = z.object({
   fatherName: z
     .string()
     .trim()
@@ -44,7 +44,7 @@ const guardianSchema = z.object({
 });
 
 // Local Guardian Schema
-const localGuardianSchema = z.object({
+const localGuardianValidationSchema = z.object({
   name: z
     .string()
     .trim()
@@ -67,21 +67,19 @@ const localGuardianSchema = z.object({
 });
 
 // Student Schema
-const studentValidationSchema = z.object({
+const createStudentValidationSchema = z.object({
   body: z.object({
     password: z
       .string()
       .min(6, { message: "Password should be at least 6 character" }),
     student: z.object({
-      name: userNameSchema,
+      name: userNameValidationSchema,
       gender: z.enum(["female", "male"], {
         errorMap: () => ({ message: "Gender must be 'male' or 'female'." }),
       }),
       isDeleted: z.boolean(),
       email: z.string().trim().email({ message: "Invalid email address." }),
-      dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
-        message: "Date of birth must be in the format YYYY-MM-DD.",
-      }),
+      dateOfBirth: z.date().optional(),
       contactNumber: z
         .string()
         .trim()
@@ -100,8 +98,8 @@ const studentValidationSchema = z.object({
         }),
       }),
       avatar: z.string().url().optional(),
-      guardian: guardianSchema,
-      localGuardian: localGuardianSchema,
+      guardian: guardianValidationSchema,
+      localGuardian: localGuardianValidationSchema,
       // isActive: z.enum(["active", "inactive"], {
       //   errorMap: () => ({ message: "Status must be 'active' or 'inactive'." }),
       // }),
@@ -120,5 +118,5 @@ const studentValidationSchema = z.object({
 
 // Export the schema for validation
 export const studentValidations = {
-  studentValidationSchema,
+  studentValidationSchema: createStudentValidationSchema,
 };
