@@ -13,16 +13,14 @@ export const createAcademicSemesterValidation = z.object({
     name: z.enum([...AcademicSemesterName] as [string], {
       required_error: "Semester name is required",
     }),
-    year: z.date({
-      required_error: "Year is required",
-    }),
-    code: z.enum([...AcademicSemesterCode] as [string], {
+    year: z.string(),
+    code: z.enum([...AcademicSemesterCode] as [string, ...string[]], {
       required_error: "Code is required",
     }),
-    startMonth: z.enum([...AcademicSemesterMonth] as [string], {
+    startMonth: z.enum([...AcademicSemesterMonth] as [string, ...string[]], {
       required_error: "Start month is required",
     }),
-    endMonth: z.enum([...AcademicSemesterMonth] as [string], {
+    endMonth: z.enum([...AcademicSemesterMonth] as [string, ...string[]], {
       required_error: "End month is required",
     }),
   }),
@@ -32,7 +30,7 @@ export const createAcademicSemesterValidation = z.object({
 export const updateAcademicSemesterValidation = z.object({
   body: z.object({
     title: z.enum([...AcademicSemesterName] as [string]).optional(),
-    year: z.date().optional(),
+    year: z.string().optional(),
     code: z.enum([...AcademicSemesterCode] as [string]).optional(),
     startMonth: z.enum([...AcademicSemesterMonth] as [string]).optional(),
     endMonth: z.enum([...AcademicSemesterMonth] as [string]).optional(),

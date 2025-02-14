@@ -1,9 +1,13 @@
+import { TAcademicSemester } from "./academicSemester.interface";
 import AcademicSemester from "./academySemester.molde";
 
 export const createAcademicSemesterIntoDB = async (
-  req: Request,
-  res: Response
+  payload: TAcademicSemester
 ) => {
-  const createData = req.body;
-  const result = await AcademicSemester.create(createData);
+  const result = await AcademicSemester.create(payload);
+  return result;
+};
+
+export const AcademicSemesterServices = {
+  createAcademicSemesterIntoDB,
 };

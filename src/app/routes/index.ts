@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { StudentRoutes } from "../modules/students/student.routes";
 import { UserRoutes } from "../modules/user/user.route";
+import { AcademicSemesterRoutes } from "../modules/academic/academicSemester.routes";
 
 const router = Router();
 
@@ -12,6 +13,10 @@ const moduleRoutes = [
   {
     path: "/users", // Removed the trailing slash
     route: UserRoutes,
+  },
+  {
+    path: "/academic-semester", // Removed the trailing slash
+    route: AcademicSemesterRoutes,
   },
 ];
 
